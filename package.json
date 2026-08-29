@@ -1,0 +1,30 @@
+{
+  "name": "ar-postcard",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "scripts": {
+    "copy:xr": "node scripts/copy-engine.mjs",
+    "dev": "npm run copy:xr && vite",
+    "dev:https": "npm run copy:xr && node scripts/dev-https.mjs",
+    "build": "npm run copy:xr && tsc --noEmit && vite build",
+    "preview": "vite preview",
+    "target": "node scripts/make-target.mjs",
+    "target:test": "node scripts/make-test-target.mjs",
+    "build:debug": "npm run copy:xr && tsc --noEmit && node scripts/build-debug.mjs"
+  },
+  "dependencies": {
+    "@8thwall/engine-binary": "1.0.0",
+    "three": "0.185.1"
+  },
+  "devDependencies": {
+    "@8thwall/image-target-cli": "1.0.0",
+    "@types/node": "26.4.0",
+    "@types/three": "0.185.4",
+    "@vitejs/plugin-basic-ssl": "2.3.0",
+    "qrcode": "1.5.4",
+    "sharp": "0.34.5",
+    "typescript": "7.0.2",
+    "vite": "8.2.2"
+  }
+}

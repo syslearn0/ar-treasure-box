@@ -1,0 +1,19 @@
+node_modules/
+dist/
+.DS_Store
+*.local
+
+# 8th Wall のエンジンは npm から取得して copy-engine.mjs で配置する。
+# リポジトリには含めない（再配布しない）。
+public/external/xr/
+public/LICENSES/
+
+# 個人の環境に依存する設定なので追跡しない（docs/blender-mcp.md に雛形あり）
+.mcp.json
+
+# 作業用の中間生成物は追跡しない。
+# 追跡するのは Blender のビルドスクリプトと、箱の元絵だけ。
+work/*
+!work/blender/
+!work/art/
+work/blender/out/

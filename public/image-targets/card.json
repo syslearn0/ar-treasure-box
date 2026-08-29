@@ -1,0 +1,23 @@
+{
+  "imagePath": "image-targets/card_luminance.png",
+  "metadata": null,
+  "name": "card",
+  "type": "PLANAR",
+  "properties": {
+    "left": 0,
+    "top": 1,
+    "width": 1039,
+    "height": 1385,
+    "isRotated": false,
+    "originalWidth": 1039,
+    "originalHeight": 1386
+  },
+  "resources": {
+    "originalImage": "card_original.png",
+    "croppedImage": "card_cropped.png",
+    "thumbnailImage": "card_thumbnail.png",
+    "luminanceImage": "card_luminance.png"
+  },
+  "created": 1787928570073,
+  "updated": 1787928570073
+}

@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover"
+    />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="theme-color" content="#101014" />
+    <title>たからばこ</title>
+
+    <!--
+      8th Wall Distributed Engine Binary (self-hosted, unmodified).
+      Copyright © 2026 Niantic Spatial, Inc. All rights reserved.
+      Licensed under the XR Engine License Agreement.
+      License text: ./LICENSES/8thwall-license.txt
+      https://github.com/8thwall/engine/blob/main/LICENSE
+    -->
+    <script src="./external/xr/xr.js" async data-preload-chunks="slam"></script>
+  </head>
+  <body>
+    <canvas id="camerafeed"></canvas>
+
+    <div id="ui-root" hidden>
+      <!-- 起動直後 -->
+      <section id="ui-launch" class="panel panel--center" hidden>
+        <h1 class="title">使いかた</h1>
+        <ol class="steps">
+          <li>下のボタンを押して、カメラを許可する</li>
+          <li>カードを机に平らに置く</li>
+          <li>絵が画面いっぱいに入るまで近づける</li>
+        </ol>
+        <button id="btn-start" class="btn btn--primary" type="button">カメラを起動する</button>
+        <p class="note">明るい場所で、光が反射しない角度から映してください</p>
+      </section>
+
+      <!-- 読み込み中 -->
+      <section id="ui-loading" class="panel panel--center" hidden>
+        <div class="spinner" aria-hidden="true"></div>
+        <p id="ui-loading-text" class="lead">読み込んでいます…</p>
+      </section>
+
+      <!-- 認識中：箱の形に近いガイド枠 -->
+      <section id="ui-guide" class="guide" hidden>
+        <div class="guide__frame" aria-hidden="true"></div>
+        <p id="ui-guide-text" class="guide__text">もう少し近づけてください</p>
+      </section>
+
+      <!-- 追跡が一時的に低下：画面を覆わない小さいヒント -->
+      <p id="ui-hint" class="hint" hidden>ゆっくり動かしてください</p>
+
+      <!-- 完全に追跡不能 -->
+      <section id="ui-recovery" class="panel panel--bottom" hidden>
+        <p class="lead">箱をもう一度映してください</p>
+      </section>
+
+      <!-- エラー -->
+      <section id="ui-error" class="panel panel--center" hidden>
+        <p id="ui-error-text" class="lead lead--error"></p>
+      </section>
+
+      <!-- 常設の小さいコントロール -->
+      <div id="ui-controls" class="controls" hidden>
+        <button id="btn-rescan" class="btn btn--ghost" type="button">再スキャン</button>
+        <button id="btn-recenter" class="btn btn--ghost" type="button">再センター</button>
+        <button id="btn-replay" class="btn btn--ghost" type="button" hidden>もう一度見る</button>
+      </div>
+
+      <div id="ui-flash" aria-hidden="true"></div>
+    </div>
+
+    <footer class="legal">
+      Powered by 8th Wall — Copyright © 2026 Niantic Spatial, Inc.
+      <a href="./LICENSES/8thwall-license.txt">License</a>
+    </footer>
+
+    <script type="module" src="./src/main.ts"></script>
+  </body>
+</html>
