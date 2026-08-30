@@ -46,6 +46,7 @@ export interface PipelineModule {
   onStart?: (args: {canvas: HTMLCanvasElement; canvasWidth: number; canvasHeight: number}) => void
   onUpdate?: (args: unknown) => void
   onException?: (error: unknown) => void
+  onVideoSizeChange?: (detail: {videoWidth: number; videoHeight: number}) => void
   onCameraStatusChange?: (args: CameraStatusDetail) => void
   listeners?: Array<{event: string; process: (event: PipelineModuleEvent<any>) => void}>
 }

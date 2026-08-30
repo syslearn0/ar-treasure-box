@@ -1,6 +1,6 @@
 import * as THREE from 'three'
 import {AmbientLight, DirectionalLight, Group} from 'three'
-import {AVATAR, DEBUG, MESSAGE, TARGET, TARGETS} from './config'
+import {AVATAR, CAMERA_FIT, DEBUG, MESSAGE, TARGET, TARGETS} from './config'
 import {checkCompatibility, loadImageTargets, waitForXR8} from './xr/engineLoader'
 import {ImageAnchor} from './xr/imageAnchor'
 import {TrackingState} from './xr/trackingState'
@@ -109,10 +109,37 @@ function boot(): void {
  */
 const MAX_DPR = 2
 
+/**
+ * カメラ映像の縦横比（videoWidth / videoHeight）。
+ * onVideoSizeChange が来るまでは不明なので 0。
+ */
+let videoAspect = 0
+
+/**
+ * ★等倍表示の仕組み★
+ *
+ * 8th Wall の映像描画（GlTextureRenderer）は、キャンバスを **覆うように**
+ * 拡大して中央で切り取る（エンジンの実装を読んで確認）。
+ * 画面いっぱいのキャンバスにすると左右が切られ、寄った映像になる。
+ *
+ * エンジン側に「はみ出さずに収める」指定は無く、改変も禁止されている。
+ * そこで **キャンバスの縦横比を映像の縦横比に一致させる**。
+ * 一致すれば切り取り量が 0 になり、映像は等倍で全体が映る。
+ * 余った領域は黒帯になるので、キャンバスは画面の中央に置く（CSS の margin:auto）。
+ */
 function sizeCanvasToWindow(canvas: HTMLCanvasElement): void {
   const dpr = Math.min(window.devicePixelRatio || 1, MAX_DPR)
-  const cssW = window.innerWidth
-  const cssH = window.innerHeight
+  let cssW = window.innerWidth
+  let cssH = window.innerHeight
+
+  if (CAMERA_FIT === 'contain' && videoAspect > 0) {
+    if (cssW / cssH > videoAspect) {
+      cssW = Math.round(cssH * videoAspect)
+    } else {
+      cssH = Math.round(cssW / videoAspect)
+    }
+  }
+
   const w = Math.round(cssW * dpr)
   const h = Math.round(cssH * dpr)
 
@@ -122,6 +149,16 @@ function sizeCanvasToWindow(canvas: HTMLCanvasElement): void {
     canvas.width = w
     canvas.height = h
   }
+}
+
+/** onVideoSizeChange から呼ぶ。比率が変わったときだけ組み直す。 */
+function applyVideoAspect(videoWidth: number, videoHeight: number): void {
+  if (!(videoWidth > 0 && videoHeight > 0)) return
+  const next = videoWidth / videoHeight
+  if (Math.abs(next - videoAspect) < 0.001) return
+  videoAspect = next
+  const canvas = document.getElementById('camerafeed') as HTMLCanvasElement | null
+  if (canvas) sizeCanvasToWindow(canvas)
 }
 
 /**
@@ -356,6 +393,14 @@ ${diagText()}`)
             : '—',
         })
       }
+    },
+
+    /**
+     * カメラの解像度が決まった / 変わったときに呼ばれる。
+     * ここでキャンバスの縦横比を映像に合わせて、切り取りを無くす。
+     */
+    onVideoSizeChange({videoWidth, videoHeight}: {videoWidth: number; videoHeight: number}) {
+      applyVideoAspect(videoWidth, videoHeight)
     },
 
     onCameraStatusChange({status}: CameraStatusDetail) {

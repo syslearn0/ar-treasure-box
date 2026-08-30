@@ -21,8 +21,8 @@
     "@8thwall/image-target-cli": "1.0.0",
     "@types/node": "26.4.0",
     "@types/three": "0.185.4",
-    "@vitejs/plugin-basic-ssl": "2.3.0",
     "qrcode": "1.5.4",
+    "selfsigned": "5.5.0",
     "sharp": "0.34.5",
     "typescript": "7.0.2",
     "vite": "8.2.2"

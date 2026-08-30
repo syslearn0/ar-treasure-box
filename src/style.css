@@ -35,12 +35,18 @@ body {
   overscroll-behavior: none;
 }
 
+/*
+ * キャンバスの大きさは JS が px で指定する（映像の縦横比に合わせるため）。
+ * ここで width/height を 100% にすると引き伸ばされてしまうので指定しない。
+ * inset:0 + margin:auto で、余った領域を黒帯にして中央に置く。
+ */
 #camerafeed {
   position: fixed;
   inset: 0;
-  width: 100%;
-  height: 100%;
+  margin: auto;
   display: block;
+  max-width: 100%;
+  max-height: 100%;
 }
 
 #ui-root {

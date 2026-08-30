@@ -73,6 +73,20 @@ export const TARGETS: TargetConfig[] = [
 /** 既定（後方互換用） */
 export const TARGET: TargetConfig = TARGETS[0]
 
+/**
+ * カメラ映像を画面にどう収めるか。
+ *
+ *   contain … 映像の全体を等倍で映す。上下（または左右）に黒帯が出る
+ *   cover   … 画面いっぱいに広げる。はみ出した部分は切り落とされる
+ *
+ * 【なぜ既定が contain なのか — エンジンの実装を読んで確認】
+ * 8th Wall の映像描画はキャンバスを **覆うように** 拡大して中央で切り取る。
+ * スマホの画面は縦長（19.5:9 など）でカメラは 4:3 なので、画面いっぱいの
+ * キャンバスにすると左右が大きく切られ、**1.5〜1.6倍に寄った映像**になる。
+ * 迫力は出るが、カードを画面に収めるのが難しくなり「認識しない」の主因になる。
+ */
+export const CAMERA_FIT: 'contain' | 'cover' = 'contain'
+
 /** デバッグ HUD を出すか。本番ビルドでは VITE_DEBUG を未設定にする。 */
 export const DEBUG = import.meta.env.VITE_DEBUG === '1' || import.meta.env.DEV
 
