@@ -1,6 +1,6 @@
 import * as THREE from 'three'
 import {AmbientLight, DirectionalLight, Group} from 'three'
-import {AVATAR, CAMERA_FIT, DEBUG, MESSAGE, TARGET, TARGETS} from './config'
+import {AVATAR, CAMERA_FIT, DEBUG, MESSAGE, SHOW_GUIDES, TARGET, TARGETS} from './config'
 import {checkCompatibility, loadImageTargets, waitForXR8} from './xr/engineLoader'
 import {ImageAnchor} from './xr/imageAnchor'
 import {TrackingState} from './xr/trackingState'
@@ -328,8 +328,9 @@ function appPipelineModule(XR8: XR8Api): PipelineModule {
       anchorRoot.name = 'anchorRoot'
       scene.add(anchorRoot)
 
-      // デバッグ時だけ座標軸と枠を出す（本番はキャラクターのみ）
-      const content = DEBUG ? createPlaceholderContent() : new Group()
+      // 位置合わせ用の目印。既定では出さない（キャラクターと重なるため）。
+      // URL に ?guides=1 を付けるか、config.ts の SHOW_GUIDES で出せる。
+      const content = SHOW_GUIDES ? createPlaceholderContent() : new Group()
       anchorRoot.add(content)
 
       avatar = new Avatar()

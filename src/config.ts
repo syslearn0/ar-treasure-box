@@ -87,8 +87,30 @@ export const TARGET: TargetConfig = TARGETS[0]
  */
 export const CAMERA_FIT: 'contain' | 'cover' = 'contain'
 
-/** デバッグ HUD を出すか。本番ビルドでは VITE_DEBUG を未設定にする。 */
-export const DEBUG = import.meta.env.VITE_DEBUG === '1' || import.meta.env.DEV
+/**
+ * URL のクエリで真偽を上書きする。`?debug=1` / `?debug=0` のように使う。
+ * スマホでは設定ファイルを書き換えにくいので、その場で切り替えられるようにしておく。
+ */
+function urlFlag(name: string): boolean | null {
+  const v = new URLSearchParams(location.search).get(name)
+  if (v === null) return null
+  return v !== '0' && v !== 'false'
+}
+
+/**
+ * デバッグ HUD（画面左上の数値）を出すか。
+ * 本番ビルドでは VITE_DEBUG を未設定にする。`?debug=0` で消せる。
+ */
+export const DEBUG = urlFlag('debug') ?? (import.meta.env.VITE_DEBUG === '1' || import.meta.env.DEV)
+
+/**
+ * 位置合わせ用の目印（座標軸・追跡領域の枠・向きを示す矢印・立方体）を出すか。
+ *
+ * 開発中に「空間に固定できているか」を目で確かめるためのもの。
+ * **既定は false。** キャラクターと重なって見えるので、ふつうは出さない。
+ * URL に `?guides=1` を付けると、書き換えずに一時的に出せる。
+ */
+export const SHOW_GUIDES = urlFlag('guides') ?? false
 
 // ---------------------------------------------------------------- 中身
 
